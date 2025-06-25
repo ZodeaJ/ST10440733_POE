@@ -27,6 +27,7 @@ namespace ST10440733_PROG6221_POE
 
         public bool IsQuizActive() => isQuizActive;
 
+
         public string StartQuiz()
         {
             if (quizQuestions == null || !quizQuestions.Any())

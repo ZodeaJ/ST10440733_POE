@@ -28,6 +28,8 @@ namespace ST10440733_PROG6221_POE
         private bool isQuizMode = false;
         private int currentQuizQuestionIndex = -1;
 
+
+
         public ChatPage(ChatbotLogic chatbot)
         {
             InitializeComponent();
@@ -48,13 +50,16 @@ namespace ST10440733_PROG6221_POE
             isTaskMode = !isTaskMode;
             if (isTaskMode)
             {
+                chatHandler.LogUserAction("User switched to task management mode");
                 btnSwitchMode.Content = "Switch to Cyber Advice";
                 AppendToConversation("\n--- Switched to Task Management mode ---\n");
             }
             else
             {
+                chatHandler.LogUserAction("User switched to cyber advice mode");
                 btnSwitchMode.Content = "Switch to Task Management";
                 AppendToConversation("\n--- Switched to Cyber Advice mode ---\n");
+
             }
         }
 
@@ -98,6 +103,7 @@ namespace ST10440733_PROG6221_POE
 
             isQuizMode = true;
             currentQuizQuestionIndex = 0;
+            chatHandler.LogUserAction("User started quiz via button");
             AppendToConversation("\n--- Quiz started. Please answer the questions. ---\n");
             ShowCurrentQuizQuestion();
         }

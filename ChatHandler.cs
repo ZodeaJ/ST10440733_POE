@@ -33,7 +33,11 @@ namespace ST10440733_PROG6221_POE
         {
             cyberAssistant = new CyberAssistant();
         }
-
+        public void LogUserAction(string actionDescription)
+        {
+            // You can add timestamps or any formatting here
+            cyberAssistant.LogActivity(actionDescription);
+        }
 
         public string HandleUserInput(string input)
         {
@@ -64,6 +68,7 @@ namespace ST10440733_PROG6221_POE
             // === QUIZ RELATED ===
             if (input.Contains("start quiz"))
             {
+                LogUserAction("User started quiz");
                 return cyberAssistant.StartQuiz();
             }
             else if (cyberAssistant.IsQuizActive())
@@ -75,12 +80,14 @@ namespace ST10440733_PROG6221_POE
             if (input.Contains("show activity log") || input.Contains("what have you done for me"))
             {
                 var log = cyberAssistant.GetActivityLog();
+                LogUserAction("User requested to view activity log");
                 return "Recent Activity:\n" + string.Join("\n", log);
             }
 
             // === VIEW TASKS ===
-            if (input.Contains("show tasks") || input.Contains("list tasks"))
+            if (input.Contains("show tasks") || input.Contains("list tasks") || input.Contains("view tasks"))
             {
+                LogUserAction("User requested to view tasks");
                 return cyberAssistant.GetFormattedTaskList();
             }
 
@@ -126,38 +133,44 @@ namespace ST10440733_PROG6221_POE
         }
         private string HandleStepByStepTask(string input)
         {
+            string originalInput = input.Trim();
+            input = originalInput.ToLower();
+
             switch (currentStep)
             {
                 case TaskCreationStep.AwaitingTitle:
-                    pendingTitle = input.Trim();
+                    pendingTitle = originalInput;
                     currentStep = TaskCreationStep.AwaitingDescription;
                     return "Got it. What's the description?";
 
                 case TaskCreationStep.AwaitingDescription:
-                    pendingDescription = input.Trim();
+                    pendingDescription = originalInput;
                     currentStep = TaskCreationStep.AwaitingReminder;
                     return "Would you like to set a reminder? If yes, say something like 'Remind me tomorrow at 5pm'. Otherwise, say 'no'.";
 
                 case TaskCreationStep.AwaitingReminder:
-                    DateTime? reminder = cyberAssistant.ParseNaturalReminderTime(input);
+                    DateTime? reminder = cyberAssistant.ParseNaturalReminderTime(originalInput);
 
-                    if (input.Trim().ToLower() == "no" || !reminder.HasValue)
+                    // Preserve values before resetting
+                    string confirmedTitle = pendingTitle;
+                    string confirmedDescription = pendingDescription;
+
+                    ResetStepFlow();
+
+                    if (input == "no" || !reminder.HasValue)
                     {
-                        cyberAssistant.AddTask(pendingTitle, pendingDescription, null);
-                        ResetStepFlow();
-                        return $"Added task: '{pendingTitle}' with no reminder.";
+                        cyberAssistant.AddTask(confirmedTitle, confirmedDescription, null);
+                        return $"Added task: '{confirmedTitle}' with no reminder.";
                     }
                     else
                     {
-                        cyberAssistant.AddTask(pendingTitle, pendingDescription, reminder);
-                        ResetStepFlow();
-                        return $"Added task: '{pendingTitle}' with reminder set for {reminder.Value:g}.";
+                        cyberAssistant.AddTask(confirmedTitle, confirmedDescription, reminder);
+                        return $"Added task: '{confirmedTitle}' with reminder set for {reminder.Value:g}.";
                     }
             }
 
             return "Something went wrong in task creation.";
         }
-
         private void ResetStepFlow()
         {
             currentStep = TaskCreationStep.None;
@@ -182,6 +195,7 @@ namespace ST10440733_PROG6221_POE
             // Fallback if no prefix match
             return input;
         }
+
 
     }
 }
