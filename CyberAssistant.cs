@@ -117,7 +117,7 @@ namespace ST10440733_PROG6221_POE
         public string HandleQuizAnswer(string userAnswer)
         {
             // Check if quiz is active and question index is valid
-            if (isQuizActive)
+            if (isQuizActive == false)
                 return "No active quiz. Click 'start quiz' to begin.";
 
             if (currentQuestionIndex >= quizQuestions.Count)

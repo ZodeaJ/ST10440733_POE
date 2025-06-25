@@ -24,6 +24,13 @@ namespace ST10440733_PROG6221_POE
         private string pendingTitle;
         private string pendingDescription;
         private bool waitingForCompletionTitle = false;
+        // Track if quiz mode is active
+        private bool isQuizMode = false;
+        // Track current quiz question index
+        private int currentQuizQuestionIndex = -1;
+        // Track current quiz score
+        private int score = 0;
+        private bool isTaskMode = false;
 
         public ChatHandler(CyberAssistant assistant)
         {
@@ -37,6 +44,12 @@ namespace ST10440733_PROG6221_POE
         {
             // You can add timestamps or any formatting here
             cyberAssistant.LogActivity(actionDescription);
+        }
+        public void ResetQuizState()
+        {
+            isQuizMode = false;
+            currentQuizQuestionIndex = -1; 
+            score = 0;                      
         }
 
         public string HandleUserInput(string input)

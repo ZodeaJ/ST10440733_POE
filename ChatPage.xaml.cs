@@ -46,8 +46,8 @@ namespace ST10440733_PROG6221_POE
 
         private void btnSwitchMode_Click(object sender, RoutedEventArgs e)
         {
-
             isTaskMode = !isTaskMode;
+
             if (isTaskMode)
             {
                 chatHandler.LogUserAction("User switched to task management mode");
@@ -56,9 +56,11 @@ namespace ST10440733_PROG6221_POE
             }
             else
             {
+                chatHandler.ResetQuizState();
                 chatHandler.LogUserAction("User switched to cyber advice mode");
                 btnSwitchMode.Content = "Switch to Task Management";
                 AppendToConversation("\n--- Switched to Cyber Advice mode ---\n");
+                
 
             }
         }
