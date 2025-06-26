@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ST10440733_PROG6221_POE
 {
+    // Declares task properties: title, description, status, and optional reminder
     public class TaskItem
     {
         public string Title { get; set; }

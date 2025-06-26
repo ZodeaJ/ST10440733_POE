@@ -29,7 +29,7 @@ namespace ST10440733_PROG6221_POE
         private int currentQuizQuestionIndex = -1;
 
 
-
+        // Initializes the ChatPage and its components
         public ChatPage(ChatbotLogic chatbot)
         {
             InitializeComponent();
@@ -44,6 +44,7 @@ namespace ST10440733_PROG6221_POE
             txtConversationHistory.Text = chatbot.GetGreeting() + "\n\n";
         }
 
+        // Handles the logic when the user switches between modes
         private void btnSwitchMode_Click(object sender, RoutedEventArgs e)
         {
             isTaskMode = !isTaskMode;
@@ -65,6 +66,7 @@ namespace ST10440733_PROG6221_POE
             }
         }
 
+        // Handles the user input when the enter button is clicked
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
             string userInput = txtUserInput.Text.Trim();
@@ -89,12 +91,14 @@ namespace ST10440733_PROG6221_POE
             txtUserInput.Clear();
         }
 
+        // Displays a message to the conversation history
         private void AppendToConversation(string message)
         {
             txtConversationHistory.AppendText(message + "\n");
             txtConversationHistory.ScrollToEnd();
         }
 
+        // Starts the quiz mode and shows the first question
         private void btnStartQuiz_Click(object sender, RoutedEventArgs e)
         {
             if (isQuizMode)
@@ -110,6 +114,7 @@ namespace ST10440733_PROG6221_POE
             ShowCurrentQuizQuestion();
         }
 
+        // Displays the current quiz question or finishes the quiz
         private void ShowCurrentQuizQuestion()
         {
             if (currentQuizQuestionIndex >= 0 && currentQuizQuestionIndex < assistant.QuizLength)

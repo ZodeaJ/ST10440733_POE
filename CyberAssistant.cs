@@ -27,7 +27,7 @@ namespace ST10440733_PROG6221_POE
 
         public bool IsQuizActive() => isQuizActive;
 
-
+        // Initializes and starts the cybersecurity quiz
         public string StartQuiz()
         {
             if (quizQuestions == null || !quizQuestions.Any())
@@ -41,6 +41,7 @@ namespace ST10440733_PROG6221_POE
             return GetCurrentQuestion();
         }
 
+        //Quiz questions their options and correct answer
         public void LoadQuizQuestions()
         {
             quizQuestions = new List<QuizQuestion>
@@ -98,6 +99,7 @@ namespace ST10440733_PROG6221_POE
         };
         }
 
+        // Displays the current quiz question with its options
         private string GetCurrentQuestion()
         {
             if (currentQuestionIndex >= quizQuestions.Count)
@@ -114,10 +116,11 @@ namespace ST10440733_PROG6221_POE
             return $"{question.Question}\n\n{options}";
         }
 
+        // Processes the user's quiz answer and returns feedback
         public string HandleQuizAnswer(string userAnswer)
         {
-            // Check if quiz is active and question index is valid
-            if (isQuizActive == false)
+            // Checks if quiz is active and question index is valid
+            if (isQuizActive)
                 return "No active quiz. Click 'start quiz' to begin.";
 
             if (currentQuestionIndex >= quizQuestions.Count)
@@ -143,7 +146,7 @@ namespace ST10440733_PROG6221_POE
 
             currentQuestionIndex++;
 
-            // If there are more questions, show next one; otherwise, finish quiz
+            // If there are more questions show next one otherwise finish quiz
             if (currentQuestionIndex < quizQuestions.Count)
             {
                 return $"{feedback}\n\n{GetCurrentQuestion()}";
@@ -158,12 +161,12 @@ namespace ST10440733_PROG6221_POE
 
         public int QuizLength => quizQuestions.Count;
 
+        // Returns a specific quiz question by index with formatted options
         public string GetQuizQuestion(int index)
         {
             if (index >= 0 && index < quizQuestions.Count)
             {
                 var q = quizQuestions[index];
-                // Use numbers instead of letters for options
                 var formattedOptions = string.Join("\n", q.Options.Select((opt, i) => $"{i + 1}. {opt}"));
                 return $"{q.Question}\n{formattedOptions}";
             }
@@ -179,6 +182,7 @@ namespace ST10440733_PROG6221_POE
             LogActivity($"Task added: '{title}'{(reminder.HasValue ? $" with reminder for {reminder.Value:g}" : "")}");
         }
 
+        // Deletes a task by title if it exists
         public void DeleteTask(string title)
         {
             var task = tasks.FirstOrDefault(t => t.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
@@ -189,6 +193,7 @@ namespace ST10440733_PROG6221_POE
             }
         }
 
+        // Registers a task as completed by title
         public void CompleteTask(string title)
         {
             var task = tasks.FirstOrDefault(t => t.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
@@ -199,6 +204,7 @@ namespace ST10440733_PROG6221_POE
             }
         }
 
+        // Returns a list of all tasks with status and reminders
         public string GetFormattedTaskList()
         {
             if (!tasks.Any()) return "You have no tasks.";
@@ -213,6 +219,7 @@ namespace ST10440733_PROG6221_POE
             return builder.ToString().Trim();
         }
 
+        // Logs an activity keeping only the last 10 entries
         public void LogActivity(string activity)
         {
             if (activityLog.Count >= 10) activityLog.RemoveAt(0);
@@ -227,7 +234,8 @@ namespace ST10440733_PROG6221_POE
 
             DateTime now = DateTime.Now;
             DateTime targetDate = now;
-            TimeSpan defaultTime = new TimeSpan(9, 0, 0); // 9:00 AM by default
+            // 9:00 AM as default
+            TimeSpan defaultTime = new TimeSpan(9, 0, 0);
             TimeSpan? userTime = null;
 
             // === Time parser ===
@@ -278,10 +286,10 @@ namespace ST10440733_PROG6221_POE
             }
             else
             {
-                return null; // could not understand the date part
+                return null;
             }
             //1
-            // Apply parsed time or default
+            // Applys parsed time or default
             return targetDate.Date + (userTime ?? defaultTime);
         }
     }

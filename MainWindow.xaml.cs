@@ -27,7 +27,7 @@ namespace ST10440733_PROG6221_POE
             Features.PlayVoiceGreeting();
 
         }
-
+        //Button start chat which takes the user to chatpage window
         private void StartChat_Click(object sender, RoutedEventArgs e)
         {
             string userName = txtName.Text.Trim();
@@ -39,13 +39,13 @@ namespace ST10440733_PROG6221_POE
                 return;
             }
 
-            // Initialize the chatbot and pass user info
+            // Initializes the chatbot and pass user infomation
             ChatbotLogic chatbot = new ChatbotLogic();
             chatbot.SetUserInfo(userName, topic);
 
             MessageBox.Show($"Welcome {userName}! Your Favourite topic {topic} is noted!", "Cyber Advice", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Pass the chatbot object to the ChatPage
+            // Passes the chatbot object to the ChatPage
             ChatPage chatPage = new ChatPage(chatbot);
             chatPage.Show();
             this.Close(); 

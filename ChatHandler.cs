@@ -32,6 +32,7 @@ namespace ST10440733_PROG6221_POE
         private int score = 0;
         private bool isTaskMode = false;
 
+        //ChatHandler constructor
         public ChatHandler(CyberAssistant assistant)
         {
             cyberAssistant = assistant;
@@ -57,13 +58,13 @@ namespace ST10440733_PROG6221_POE
             string originalInput = input.Trim();
             input = originalInput.ToLower();
 
-            // === Handle step-by-step task creation ===
+            
             if (currentStep != TaskCreationStep.None)
             {
                 return HandleStepByStepTask(originalInput);
             }
 
-            // === Handle waiting for task title to complete ===
+            // Handles waiting for task title to complete
             if (waitingForCompletionTitle)
             {
                 waitingForCompletionTitle = false;
@@ -71,7 +72,7 @@ namespace ST10440733_PROG6221_POE
                 return $"Task '{originalInput}' marked as completed.";
             }
 
-            // === Step-by-step triggers ===
+            // if statement for when use whats to add a task
             if (input == "add task" || input == "create task" || input == "add new task" || input == "create new task")
             {
                 currentStep = TaskCreationStep.AwaitingTitle;
@@ -184,6 +185,7 @@ namespace ST10440733_PROG6221_POE
 
             return "Something went wrong in task creation.";
         }
+        // Resets the current task creation step and clears pending inputs
         private void ResetStepFlow()
         {
             currentStep = TaskCreationStep.None;
@@ -191,9 +193,9 @@ namespace ST10440733_PROG6221_POE
             pendingDescription = null;
         }
 
+        // Extracts a task title from user input based on known prefixes
         private string ExtractTaskTitle(string input)
         {
-            // Try to remove common prefixes
             string[] prefixes = { "remind me to", "add task to", "add a task to", "remember to", "reminder to", "add reminder to", "task to" };
 
             foreach (var prefix in prefixes)
@@ -204,8 +206,6 @@ namespace ST10440733_PROG6221_POE
                     return input.Substring(index + prefix.Length).Trim();
                 }
             }
-
-            // Fallback if no prefix match
             return input;
         }
 
